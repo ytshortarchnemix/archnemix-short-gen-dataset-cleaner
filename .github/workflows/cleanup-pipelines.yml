@@ -17,7 +17,7 @@ jobs:
       - name: Delete pipeline folders older than 24 hours
         env:
           HF_TOKEN:   ${{ secrets.HF_TOKEN }}
-          HF_DATASET: ${{ secrets.HF_DATASET }}   # e.g. YTShortMakerArchx/archnemix-pipelines
+          HF_DATASET: ${{ secrets.HF_DATASET }}   
         run: |
           python3 - <<'EOF'
           import os, json, sys
