@@ -4,7 +4,7 @@ Scheduled maintenance tasks for the [ArchNemix](https://github.com/YTShortMakerA
 
 ## What is this repo?
 
-ArchNemix is a self-hosted AI pipeline that generates YouTube Shorts from Reddit posts. The pipeline runs across several HuggingFace Spaces:
+ArchNemix is a self-hosted AI pipeline that generates Reddit-style YouTube Shorts from user-provided text scripts. The pipeline runs across several HuggingFace Spaces:
 
 - **TTS** — Kokoro-82M text-to-speech (3 spaces)
 - **Aligner** — Montreal Forced Aligner + Qwen3 forced aligner (6 spaces)
