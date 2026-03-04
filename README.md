@@ -19,8 +19,6 @@ This repository contains a scheduled GitHub Actions workflow that automatically 
 - **Schedule:** runs periodically to clean old pipeline files  
 - **Trigger:** can also be run manually from the Actions tab  
 
-> Note: This workflow requires access to HuggingFace datasets via private credentials. Do **not** expose secrets in public repos.
-
 ## License
 
 This software is proprietary and all rights are reserved by Archnemix.  
