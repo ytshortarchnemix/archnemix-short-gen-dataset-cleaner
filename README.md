@@ -1,48 +1,34 @@
 # ArchNemix Pipeline Maintenance
 
-Scheduled maintenance tasks for the [ArchNemix](https://github.com/YTShortMakerArchx) YouTube Shorts generation pipeline.
+Scheduled maintenance tasks for the ArchNemix YTShort pipeline — automated cleanup of temporary dataset files.
 
 ## What is this repo?
 
-ArchNemix is a self-hosted AI pipeline that generates Reddit-style YouTube Shorts from user-provided text scripts. The pipeline runs across several HuggingFace Spaces:
+**Archnemix** is a brand. **YTShort** is a tool developed and owned under the Archnemix brand.
 
-- **TTS** — Kokoro-82M text-to-speech
-- **Aligner** — Montreal Forced Aligner + Qwen3 forced aligner
-- **Video** — FFmpeg subtitle burn + encode
-- **Controller** — orchestrates all stages, stores intermediate files in a HuggingFace dataset
+YTShort is a self-hosted AI pipeline that generates Reddit-style YouTube Shorts from user-provided text scripts. Temporary files are produced during the pipeline run and need periodic cleanup.
 
 ## Why does this repo exist?
 
-Each pipeline run produces temporary files stored in a HuggingFace dataset:
-
-```
-{pipeline_id}/
-  audio.wav              # TTS output
-  tts_timestamps.json    # word timestamps from TTS
-  align_timestamps.json  # word timestamps from forced alignment
-  video.mp4              # final rendered short
-  meta.json              # creation timestamp for cleanup
-```
-
-These files are temporary. Once the user has downloaded their video, the files serve no purpose. This repo contains a scheduled GitHub Actions workflow that runs every 6 hours and deletes any pipeline folder older than 24 hours.
+This repository contains a scheduled GitHub Actions workflow that automatically deletes temporary pipeline files after a set period. This keeps the pipeline dataset clean and ensures storage is managed efficiently.
 
 ## Workflows
 
 ### `cleanup-pipelines.yml`
 
-- **Schedule:** every 6 hour
-- **What it does:** reads `meta.json` from each pipeline folder in the HuggingFace dataset, checks the `created_at` timestamp, and deletes the entire folder if it is older than 24 hours
-- **Trigger:** also runnable manually from the Actions tab
+- **Schedule:** runs periodically to clean old pipeline files  
+- **Trigger:** can also be run manually from the Actions tab  
 
-## Secrets required
-
-Set these in **Settings → Secrets and variables → Actions**:
-
-| Secret | Value |
-|--------|-------|
-| `HF_TOKEN` | HuggingFace write token with access to the pipeline dataset |
-| `HF_DATASET` | Dataset repo ID, e.g. `YTShortMakerArchx/archnemix-pipelines` |
+> Note: This workflow requires access to HuggingFace datasets via private credentials. Do **not** expose secrets in public repos.
 
 ## License
 
-PROPRIETARY SOFTWARE LICENSE — see `LICENSE.txt`
+This software is proprietary and all rights are reserved by Archnemix.  
+**No part of this code may be used, copied, or distributed without explicit written permission from the owner.**  
+
+See `LICENSE.txt` for full terms.
+
+## Contact
+
+- General: archnemix@gmail.com  
+- YTShort tool: ytshort.archnemix@gmail.com
