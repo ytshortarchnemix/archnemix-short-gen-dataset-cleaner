@@ -1,0 +1,42 @@
+PROPRIETARY SOFTWARE LICENSE
+Version 1.0
+
+Copyright (c) 2026 Archnemix. All rights reserved.
+
+This software, the ArchNemix YTShort pipeline and all associated source code,
+configuration, workflows, and documentation (collectively, the "Software")
+are the exclusive intellectual property of Archnemix and its owner.
+
+ArchNemix is a brand. YTShort is a tool developed under and owned by the
+ArchNemix brand. Unauthorized use of either the Software or the brand name
+is strictly prohibited.
+
+STRICTLY PROHIBITED WITHOUT PRIOR WRITTEN PERMISSION FROM THE OWNER:
+  - Copying, reproducing, or distributing any part of this Software
+  - Modifying, adapting, or creating derivative works based on this Software
+  - Using this Software or any portion of it in any personal, commercial,
+    or non-commercial project
+  - Reverse engineering, decompiling, or disassembling this Software
+  - Sublicensing or transferring any rights to this Software
+  - Using the name "Archnemix" or "YTShort" in any project, product,
+    or service without explicit written authorization
+
+This Software is made publicly visible solely for transparency and portfolio
+purposes. Public visibility does NOT grant any license, right, or permission
+to use, copy, modify, or distribute the Software or any part of it.
+
+TO REQUEST WRITTEN PERMISSION, CONTACT THE OWNER:
+
+  General Inquiries:      archnemix@gmail.com
+  YTShort Tool Requests:  ytshort.archnemix@gmail.com
+
+Requests must be submitted in writing. Verbal agreements are not valid.
+Permission is only granted upon receipt of a signed written response
+from the owner.
+
+ANY UNAUTHORIZED USE IS A VIOLATION OF COPYRIGHT LAW AND WILL BE
+PURSUED TO THE FULLEST EXTENT PERMITTED BY LAW.
+
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+THE OWNER ACCEPTS NO LIABILITY FOR ANY DAMAGES ARISING FROM
+UNAUTHORIZED USE OF THIS SOFTWARE.
