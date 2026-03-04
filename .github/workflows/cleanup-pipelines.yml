@@ -1,0 +1,113 @@
+name: Cleanup Old Pipeline Files
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'   # every 3 hours
+  workflow_dispatch:        # manual trigger from GitHub UI for testing
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Install huggingface_hub
+        run: pip install huggingface_hub --quiet
+
+      - name: Delete pipeline folders older than 24 hours
+        env:
+          HF_TOKEN:   ${{ secrets.HF_TOKEN }}
+          HF_DATASET: ${{ secrets.HF_DATASET }}   # e.g. YTShortMakerArchx/archnemix-pipelines
+        run: |
+          python3 - <<'EOF'
+          import os, json, sys
+          from datetime import datetime, timezone, timedelta
+          from huggingface_hub import HfApi
+
+          TOKEN   = os.environ["HF_TOKEN"]
+          DATASET = os.environ["HF_DATASET"]
+          CUTOFF  = timedelta(hours=24)
+
+          api = HfApi(token=TOKEN)
+
+          print(f"Scanning dataset: {DATASET}")
+
+          # List every file in the repo
+          try:
+              all_files = list(api.list_repo_files(repo_id=DATASET, repo_type="dataset"))
+          except Exception as e:
+              print(f"ERROR listing files: {e}")
+              sys.exit(1)
+
+          # Find all meta.json files — one per pipeline folder
+          meta_files = [f for f in all_files if f.endswith("/meta.json")]
+          print(f"Found {len(meta_files)} pipeline folder(s)")
+
+          now     = datetime.now(timezone.utc)
+          deleted = 0
+          skipped = 0
+          errors  = 0
+
+          for meta_path in meta_files:
+              # meta_path looks like: {pipeline_id}/meta.json
+              pipeline_id = meta_path.split("/")[0]
+
+              # Fetch and parse meta.json
+              try:
+                  from huggingface_hub import hf_hub_download
+                  local = hf_hub_download(
+                      repo_id=DATASET,
+                      filename=meta_path,
+                      repo_type="dataset",
+                      token=TOKEN,
+                  )
+                  with open(local) as f:
+                      meta = json.load(f)
+              except Exception as e:
+                  print(f"  SKIP {pipeline_id}: could not read meta.json — {e}")
+                  errors += 1
+                  continue
+
+              created_str = meta.get("created_at", "")
+              if not created_str:
+                  print(f"  SKIP {pipeline_id}: meta.json has no created_at")
+                  errors += 1
+                  continue
+
+              try:
+                  created_at = datetime.fromisoformat(created_str.replace("Z", "+00:00"))
+              except Exception as e:
+                  print(f"  SKIP {pipeline_id}: bad created_at '{created_str}' — {e}")
+                  errors += 1
+                  continue
+
+              age = now - created_at
+              if age < CUTOFF:
+                  print(f"  KEEP {pipeline_id}: age {age} < 24h")
+                  skipped += 1
+                  continue
+
+              # Delete every file inside this pipeline folder
+              folder_files = [f for f in all_files if f.startswith(f"{pipeline_id}/")]
+              print(f"  DELETE {pipeline_id}: age {age} — {len(folder_files)} file(s)")
+
+              for file_path in folder_files:
+                  try:
+                      api.delete_file(
+                          path_in_repo=file_path,
+                          repo_id=DATASET,
+                          repo_type="dataset",
+                          commit_message=f"cleanup: remove {file_path} (pipeline >24h old)",
+                      )
+                      print(f"    ✓ deleted {file_path}")
+                  except Exception as e:
+                      print(f"    ✗ failed to delete {file_path}: {e}")
+                      errors += 1
+
+              deleted += 1
+
+          print(f"\nDone — deleted: {deleted}, kept: {skipped}, errors: {errors}")
+
+          if errors > 0:
+              sys.exit(1)
+          EOF
