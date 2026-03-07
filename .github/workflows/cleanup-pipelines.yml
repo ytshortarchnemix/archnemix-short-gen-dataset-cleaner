@@ -103,7 +103,7 @@ jobs:
           from datetime import datetime, timezone, timedelta
           from huggingface_hub import HfApi, hf_hub_download
 
-          TOKEN   = os.environ["HF_TOKEN_RE"]
+          TOKEN   = os.environ["HF_TOKEN"]
           DATASET = os.environ["HF_DATASET_OVERNIGHT"]
           CUTOFF  = timedelta(hours=30)
 
