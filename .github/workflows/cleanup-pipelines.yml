@@ -95,7 +95,7 @@ jobs:
 
       - name: Delete overnight job folders older than 30 hours
         env:
-          HF_TOKEN_RE:          ${{ secrets.HF_TOKEN_RE }}
+          HF_TOKEN:          ${{ secrets.HF_TOKEN }}
           HF_DATASET_OVERNIGHT: ${{ secrets.HF_DATASET_OVERNIGHT }}
         run: |
           python3 - <<'EOF'
